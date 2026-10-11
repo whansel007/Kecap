@@ -5,3 +5,5 @@ body{position:relative}header .topbar{justify-content:space-between;gap:8px}head
 main>details.menu{padding:13px 0;border-bottom:1px solid #D9C3A0}main>details.menu summary{font-size:13px;font-weight:700;color:#542518;cursor:pointer}main>details.menu[open]>summary{margin-bottom:9px}
 header{background-color:#2A120C;background-image:url("batik-outline.svg");background-repeat:repeat;background-size:180px 180px}
 body{background-color:#F4E6C9}
+header .header-actions{display:flex;align-items:center;gap:7px}header .keyboard-launch{width:36px;height:36px;margin:0;padding:0;border:1px solid #ffffff55;border-radius:9px;background:#ffffff18;color:#fff;font:20px/1 system-ui,sans-serif}header .keyboard-launch:hover{background:#ffffff30}
+.shortcut-setting{font-weight:600}.shortcut-row{display:flex;gap:7px;margin-top:4px}.shortcut-row button{flex:1;margin:0}.shortcut-row button:first-child{background:#FFF9EB;color:#2A1911;border:1px solid #C8B493;text-align:left}
