@@ -6,20 +6,20 @@ Kécap
 
 ## Award tracks
 
-- [x] Culture × Tech — primary track
-- [x] Design × Tech
+- [x] Design × Tech — primary track
+- [x] Culture × Tech
 
 ## Project overview
 
-This is ᮞᮥᮔ᮪ᮓ, Aksara Sunda. It is still taught, but many learners have little reason to use it after school. After six years studying Chinese, I still struggle with Hanzi because I rarely used it outside class; my Sundanese-fluent father cannot read the script either. Kécap (“word” in Sundanese) is a Chrome extension that transliterates supported web text into Aksara Sunda. Hover for the Latin spelling and character breakdown, or type in Aksara while websites receive Latin text. Kécap brings the script into everyday reading, giving people a reason to practice.
+This is ᮞᮥᮔ᮪ᮓ, Aksara Sunda. It is taught in school, but many learners have little reason to use it afterward. After six years studying Chinese, I still struggle with Hanzi because I rarely used it outside class; my Sundanese-fluent father cannot read Aksara either. Kécap (“word” in Sundanese) is a Chrome extension that brings Aksara into everyday browsing and chat. As someone types, they see Aksara while the website receives Latin, so friends can read and reply as usual. One person gets real writing practice without asking the whole conversation to learn a new script.
 
-*Word count: 91 / 100*
+*Word count: 95 / 100*
 
 ## The build
 
-Kécap is a Manifest V3 Chrome extension built with JavaScript, HTML/CSS, local transliteration logic, Chrome storage, and Noto Sans Sundanese. It transliterates page text, supports automatic rewriting, hover and right-click spelling explanations, digit conversion, keyboard layouts with rarangken, and Latin-backed Aksara entry. Optional image text extraction calls OpenAI or Anthropic only when requested. We explored using everyday browsing as a low-friction way to practice. Next, we want Sundanese readers to review spellings and explanations, improve site compatibility, and record a short demo.
+Kécap is a Manifest V3 Chrome extension built with JavaScript, HTML/CSS, local transliteration logic, Tesseract.js OCR, Chrome storage, and Noto Sans Sundanese. It rewrites supported page text, including dynamically updated YouTube captions, explains spellings on hover and right-click, converts digits, and includes an on-screen keyboard. In chat, its Latin-backed input lets the writer see Aksara while the website receives Latin. Image text recognition and transliteration run on-device without an API key. Next, we want to verify Telegram and WhatsApp Web compatibility, review spellings with Sundanese readers, and record a short demo.
 
-*Word count: 82 / 100*
+*Word count: 91 / 100*
 
 ## Team & collaboration
 
@@ -28,21 +28,31 @@ I brought my perspective as a learner who wants to read Aksara Sunda, along with
 ## AI & tool attribution
 
 - **OpenAI Codex:** coding assistance and iterative implementation during development.
-- **Image text extraction:** optional, user-requested calls to either the OpenAI or Anthropic API. The user selects the provider and supplies their own API key; the configured model is used for OCR and, in English source mode, phonetic respelling. Page text transliteration runs locally.
+- **Local image OCR:** Tesseract.js v7 and its core run on-device with bundled English and Indonesian OCR models from Tesseract's trained data. Images are not sent to an AI provider. OCR model files and Tesseract components are Apache 2.0 licensed; local transliteration uses the project's spelling mappings.
 - **Technology:** Chrome Manifest V3, JavaScript, HTML, CSS, Chrome extension storage, and the bundled Noto Sans Sundanese font.
 - **Font:** Noto Sans Sundanese from Noto Fonts, licensed under the SIL Open Font License 1.1.
 - **Reference material:** Aksara Sunda charts supplied by the project creator informed the character, modifier, and digit reference. No external text dataset is bundled.
 
+## Load the extension in Chrome
+
+1. Download or clone this repository, then extract it if it is a ZIP file.
+2. In Chrome, open `chrome://extensions` and turn on **Developer mode**.
+3. Click **Load unpacked** and select the repository's `kecap-extension/` folder.
+4. Pin Kécap from Chrome's Extensions menu if you want quick access to its settings and keyboard.
+5. Open a website. Automatic page rewriting is on by default; use the Kécap popup's Settings if you want to change it.
+
+Text rewriting, keyboard input, YouTube caption rewriting, and image OCR work without an API key. Image OCR is local and works best with clear, large, horizontal text; it does not translate meaning.
+
 ## Project links & demo
 
 - **Source code:** [github.com/whansel007/Kecap](https://github.com/whansel007/Kecap)
-- **Live demo:** No public deployment yet. The extension includes a local demo at [`kecap-extension/demo/demo.html`](kecap-extension/demo/demo.html); load the `kecap-extension/` folder as an unpacked extension in Chrome, then open `chrome-extension://<extension-id>/demo/demo.html`.
-- **Demo video:** Not recorded yet. The submission form accepts a video up to two minutes; recording one is a high-priority next step.
+- **Local demo:** [`kecap-extension/demo/demo.html`](kecap-extension/demo/demo.html) includes a text-rewriting and mock-comic walkthrough. Load the extension as described above, then open the demo page in Chrome.
+- **Planned demo video:** Show a Wikipedia page automatically rendered in Aksara, then compare two Telegram windows side by side: one displays ordinary Latin text, while the Kécap-enabled writer sees Aksara as they type and the site receives Latin. This demonstrates practice in a real conversation without requiring the other person to read Aksara. The submission video must be two minutes or less.
 - **Figma / prototype:** Not applicable; the interactive prototype is the Chrome extension.
-- **Try-it notes:** The local mock comic demo does not need an API key. Real image text extraction requires the judge to configure their own OpenAI or Anthropic API key in the extension settings. Page text transliteration is local and does not require a key.
+- **Try-it notes:** Page rewriting and local image OCR need no API key. The mock comic demo uses supplied sample text regions; real images are OCRed on-device. YouTube captions are rewritten when automatic page rewriting is enabled.
 
 ## Story for the presentation
 
 > A writing system doesn't survive because it's recorded somewhere. It survives because people use it.
 
-Kécap is built around a simple idea: teaching a script is not enough if people have no reason to keep reading and writing it. Instead of asking users to find new material, Kécap brings Aksara Sunda to content they already choose to read.
+People often learn a spoken language by talking with its speakers. I want to bring that kind of everyday practice to a writing system. My Sundanese-fluent father cannot read Aksara Sunda, and I know from studying Chinese that lessons alone do not make me fluent in a script I rarely use. Kécap lets me write a Telegram message while seeing Aksara on my screen; the site sends Latin, so my friend can read and reply without changing how they chat. I can practice with any conversation partner, even one who has never learned Aksara. The point is not to make everyone learn at once—it is to make using the script part of something people already do.

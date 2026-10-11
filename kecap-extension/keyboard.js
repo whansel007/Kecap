@@ -36,6 +36,7 @@
     if (!hasExtensionContext()) return;
     try { chrome.storage.local.set(values); } catch (_) {}
   }
+  const tr=(text,substitutions)=>globalThis.KecapLocale?.translate(text,substitutions)||String(text).replace(/\{(\w+)\}/g,(_,key)=>substitutions?.[key]??`{${key}}`);
 
   const DEFAULT_TOGGLE_SHORTCUT={key:'k',alt:true,ctrl:false,meta:false,shift:true};
   const DEFAULT_KEYBOARD_LAYOUT='alphabetical';
@@ -111,7 +112,6 @@
     if (active) rememberEditor(active);
     else rememberFromSelection();
     if (target&&target.isConnected) return true;
-    notify('Click inside a text field or editable page area, then choose a key.');
     return false;
   }
   function focusTarget() {
@@ -269,7 +269,7 @@
 
   function makeButton(glyph,label,title,onClick,className='key') {
     const button=document.createElement('button');
-    button.type='button'; button.className=className; button.title=title||label; button.setAttribute('aria-label',title||label);
+    button.type='button'; button.className=className; button.title=tr(title||label); button.setAttribute('aria-label',tr(title||label));
     if(className==='key') {
       button.dataset.keyId=glyph;
       button.draggable=keyboardLayout==='custom';
@@ -292,7 +292,7 @@
       });
     }
     const main=document.createElement('span'); main.className='glyph'; main.textContent=glyph;
-    const sub=document.createElement('small'); sub.textContent=label;
+    const sub=document.createElement('small'); sub.textContent=tr(label);
     button.append(main,sub);
     button.addEventListener('pointerdown',e=>{if(!(className==='key'&&keyboardLayout==='custom'))e.preventDefault();});
     button.addEventListener('click',e=>{e.stopPropagation();keyboardHasFocus=true;const index=navButtons().indexOf(button);if(index>=0){navIndex=index;updateNavHighlight();}onClick();});
@@ -411,7 +411,7 @@
     if (!consonant) { variantArea.hidden=true;navIndex=baseNavIndex;updateNavHighlight();updateKeyboardTip();if(keyArea?.children[navIndex])revealInPanel(keyArea.children[navIndex]);return; }
     baseNavIndex=navIndex;
     variantArea.hidden=false;
-    const heading=document.createElement('div'); heading.className='variant-heading'; heading.textContent='Choose the syllable for '+consonant.latin;
+    const heading=document.createElement('div'); heading.className='variant-heading'; heading.textContent=tr('Choose the syllable for {word}',{word:consonant.latin});
     const choices=document.createElement('div'); choices.className='variant-choices';
     for (const [vowel,suffix] of VARIANTS) {
       const glyph=consonant.glyph+suffix;
@@ -420,7 +420,7 @@
       const button=makeButton(glyph,label,title,()=>applyVariant(suffix,vowel),'key variant');
       choices.append(button);
     }
-    const modifierHeading=document.createElement('div');modifierHeading.className='modifier-heading';modifierHeading.textContent='Rarangken';
+    const modifierHeading=document.createElement('div');modifierHeading.className='modifier-heading';modifierHeading.textContent=tr('Rarangken');
     const modifierChoices=document.createElement('div');modifierChoices.className='modifier-choices';
     for(const [glyph,label,kind,latinSound,hint] of SYLLABLE_MODIFIERS){
       const button=makeButton(glyph,hint,label,()=>addSyllableModifier(glyph,kind,latinSound,button),'key modifier');button.setAttribute('aria-pressed','false');modifierChoices.append(button);
@@ -451,16 +451,16 @@
     if(!keyboardTip)return;
     const title=keyboardTip.querySelector('strong'),description=keyboardTip.querySelector('span');
     const hasTarget=!!target?.isConnected;
-    title.textContent=hasTarget?'Text field active':'Click a text field first';
+    title.textContent=tr(hasTarget?'Text field active':'Click a text field first');
     keyboardTip.dataset.targetActive=String(hasTarget);
     if(activeTab==='Consonants'&&variantArea&&!variantArea.hidden) {
-      description.textContent='Choose any rarangken first, then choose a vowel. The vowel ends the syllable selection.';
+      description.textContent=tr('Choose any rarangken first, then choose a vowel. The vowel ends the syllable selection.');
     } else if(activeTab==='Consonants') {
-      description.textContent='Choose a consonant, add any rarangken, then choose a vowel. The vowel ends the syllable selection.';
+      description.textContent=tr('Choose a consonant, add any rarangken, then choose a vowel. The vowel ends the syllable selection.');
     } else if(activeTab==='Signs') {
-      title.textContent='Rarangken and signs';description.textContent='Choose a sign to add it to your text.';
+      title.textContent=tr('Rarangken and signs');description.textContent=tr('Choose a sign to add it to your text.');
     } else {
-      title.textContent='Aksara Sunda digits';description.textContent='Choose a digit to add it to your text.';
+      title.textContent=tr('Aksara Sunda digits');description.textContent=tr('Choose a digit to add it to your text.');
     }
   }
   function renderKeys() {
@@ -498,27 +498,27 @@
     style.textContent+='.keyboard-tip{min-height:50px;margin-top:6px;padding:8px 12px;gap:4px}.keyboard-tip[data-target-active=true] strong{color:#3b6b42}.keyboard-tip[data-target-active=false] strong{color:#9a3c26}';
     panel=document.createElement('section'); panel.className='panel'; panel.style.visibility='hidden'; panel.tabIndex=0; panel.setAttribute('role','dialog'); panel.setAttribute('aria-label','On-screen Aksara Sunda keyboard');
     const bar=document.createElement('div'); bar.className='bar';
-    const title=document.createElement('div'); title.className='title'; title.textContent='Aksara Sunda keyboard';
-    const subtitle=document.createElement('small'); subtitle.textContent='Drag to move · Tab / Shift+Tab switches tabs · W A S D or arrows · tap Right Shift to select · Esc closes'; title.append(subtitle);
-    const close=document.createElement('button'); close.className='close'; close.type='button'; close.textContent='×'; close.title='Close keyboard'; close.setAttribute('aria-label','Close keyboard'); close.addEventListener('pointerdown',e=>e.preventDefault()); close.addEventListener('click',closeKeyboard);
+    const title=document.createElement('div'); title.className='title'; const titleText=document.createElement('span');titleText.className='panel-title';titleText.textContent=tr('Aksara Sunda keyboard');title.append(titleText);
+    const subtitle=document.createElement('small'); subtitle.textContent=tr('Drag to move · Tab / Shift+Tab switches tabs · W A S D or arrows · tap Right Shift to select · Esc closes'); title.append(subtitle);
+    const close=document.createElement('button'); close.className='close'; close.type='button'; close.textContent='×'; close.title=tr('Close keyboard'); close.setAttribute('aria-label',tr('Close keyboard')); close.addEventListener('pointerdown',e=>e.preventDefault()); close.addEventListener('click',closeKeyboard);
     bar.append(title,close);
     const inside=document.createElement('div'); inside.className='inside';
     const tabs=document.createElement('div'); tabs.className='tabs';
     for (const name of ['Consonants','Digits','Signs']) {
-      const tab=document.createElement('button'); tab.type='button'; tab.className='tab'; tab.dataset.tab=name; tab.textContent=name; tab.setAttribute('aria-selected',String(name===activeTab)); tab.addEventListener('pointerdown',e=>e.preventDefault()); tab.addEventListener('click',()=>{keyboardHasFocus=true;activeTab=name;tabs.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',String(x===tab)));renderKeys();}); tabs.append(tab);
+      const tab=document.createElement('button'); tab.type='button'; tab.className='tab'; tab.dataset.tab=name; tab.textContent=tr(name); tab.setAttribute('aria-selected',String(name===activeTab)); tab.addEventListener('pointerdown',e=>e.preventDefault()); tab.addEventListener('click',()=>{keyboardHasFocus=true;activeTab=name;tabs.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',String(x===tab)));renderKeys();}); tabs.append(tab);
     }
-    const layoutControl=document.createElement('label');layoutControl.className='layout-control';layoutControl.textContent='Layout';
-    layoutSelect=document.createElement('select');layoutSelect.className='layout-select';layoutSelect.setAttribute('aria-label','Keyboard layout');
-    for(const [value,label] of [['similar','Similar shapes'],['alphabetical','Alphabetical'],['alphabetical-vowels','Alphabetical + vowels'],['custom','Custom · drag to arrange']]){const option=document.createElement('option');option.value=value;option.textContent=label;layoutSelect.append(option);}
+    const layoutControl=document.createElement('label');layoutControl.className='layout-control';layoutControl.append(document.createTextNode(tr('Layout')));
+    layoutSelect=document.createElement('select');layoutSelect.className='layout-select';layoutSelect.setAttribute('aria-label',tr('Keyboard layout'));
+    for(const [value,label] of [['similar','Similar shapes'],['alphabetical','Alphabetical'],['alphabetical-vowels','Alphabetical + vowels'],['custom','Custom · drag to arrange']]){const option=document.createElement('option');option.value=value;option.textContent=tr(label);layoutSelect.append(option);}
     layoutSelect.value=keyboardLayout;layoutSelect.addEventListener('pointerdown',()=>{keyboardHasFocus=false;});layoutSelect.addEventListener('change',()=>{keyboardLayout=layoutSelect.value;keyboardHasFocus=true;updateLayoutTabs();renderKeys();writeLocal({keyboardLayout});if(target?.isConnected)focusTarget();});layoutControl.append(layoutSelect);tabs.append(layoutControl);
-    layoutHint=document.createElement('div');layoutHint.className='layout-hint';layoutHint.textContent='Drag and drop keys to arrange them.';layoutHint.hidden=keyboardLayout!=='custom';
+    layoutHint=document.createElement('div');layoutHint.className='layout-hint';layoutHint.textContent=tr('Drag and drop keys to arrange them.');layoutHint.hidden=keyboardLayout!=='custom';
     keyboardTip=document.createElement('div');keyboardTip.className='keyboard-tip';
     const tipTitle=document.createElement('strong'),tipDescription=document.createElement('span');keyboardTip.append(tipTitle,tipDescription);
     keyArea=document.createElement('div');
     variantArea=document.createElement('div'); variantArea.className='variant-area'; variantArea.hidden=true;
     const tools=document.createElement('div'); tools.className='tools';
-    const back= document.createElement('button'); back.type='button'; back.className='utility'; back.textContent='⌫ Backspace'; back.addEventListener('pointerdown',e=>e.preventDefault()); back.addEventListener('click',backspace);
-    const space=document.createElement('button'); space.type='button'; space.className='utility space'; space.textContent='Space'; space.addEventListener('pointerdown',e=>e.preventDefault()); space.addEventListener('click',()=>{pending=null;renderVariants(null);insertText(' ');});
+    const back= document.createElement('button'); back.type='button'; back.className='utility backspace'; back.textContent=tr('⌫ Backspace'); back.addEventListener('pointerdown',e=>e.preventDefault()); back.addEventListener('click',backspace);
+    const space=document.createElement('button'); space.type='button'; space.className='utility space'; space.textContent=tr('Space'); space.addEventListener('pointerdown',e=>e.preventDefault()); space.addEventListener('click',()=>{pending=null;renderVariants(null);insertText(' ');});
     tools.append(back,space);
     messageArea=document.createElement('div'); messageArea.className='message'; messageArea.setAttribute('aria-live','polite');
     inside.append(tabs,layoutHint,keyArea,variantArea,tools,messageArea,keyboardTip); panel.append(bar,inside); shadow.append(style,panel); document.documentElement.append(host);
@@ -554,13 +554,27 @@
     panel.style.top=Math.max(pad,Math.min(innerHeight-r.height-pad,r.top))+'px';
     panel.style.bottom='auto';
   }
+  function refreshKeyboardLanguage() {
+    if(!host||!shadow)return;
+    shadow.querySelector('.panel-title').textContent=tr('Aksara Sunda keyboard');
+    shadow.querySelector('.bar small').textContent=tr('Drag to move · Tab / Shift+Tab switches tabs · W A S D or arrows · tap Right Shift to select · Esc closes');
+    const close=shadow.querySelector('.close');close.title=tr('Close keyboard');close.setAttribute('aria-label',tr('Close keyboard'));
+    shadow.querySelectorAll('.tab').forEach(tab=>tab.textContent=tr(tab.dataset.tab));
+    const layoutText=shadow.querySelector('.layout-control')?.firstChild;if(layoutText)layoutText.textContent=tr('Layout');
+    layoutSelect?.setAttribute('aria-label',tr('Keyboard layout'));
+    const labels={similar:'Similar shapes',alphabetical:'Alphabetical','alphabetical-vowels':'Alphabetical + vowels',custom:'Custom · drag to arrange'};
+    layoutSelect?.querySelectorAll('option').forEach(option=>option.textContent=tr(labels[option.value]));
+    if(layoutHint)layoutHint.textContent=tr('Drag and drop keys to arrange them.');
+    const back=shadow.querySelector('.backspace');if(back)back.textContent=tr('⌫ Backspace');
+    const space=shadow.querySelector('.space');if(space)space.textContent=tr('Space');
+    renderKeys();updateKeyboardTip();
+  }
   function openKeyboard() {
     if(!target) { const active=editableRoot(document.activeElement); if(active)rememberEditor(active);else rememberFromSelection(); }
     buildPanel();
     keyboardHasFocus=true;
     if(target?.isConnected)focusTarget();
-    if(!target)notify('Click inside a text field or editable page area, then choose a key.');
-    else notify('');
+    notify('');
   }
   function matchesToggleShortcut(e) {
     const shortcut=toggleShortcut;
@@ -571,8 +585,8 @@
     e.preventDefault();e.stopImmediatePropagation();
     if(host)closeKeyboard();else openKeyboard();
   },true);
-  readLocal(['keyboardShortcut','latinDisplay','keyboardLayout','keyboardCustomOrders'],data=>{if(data.keyboardShortcut?.key)toggleShortcut=data.keyboardShortcut;latinDisplayMode=data.latinDisplay===true;keyboardLayout=data.keyboardLayout||DEFAULT_KEYBOARD_LAYOUT;customKeyOrders=data.keyboardCustomOrders||{};updateLayoutTabs();if(host)renderKeys();});
-  chrome.storage.onChanged.addListener((changes,area)=>{if(area!=='local')return;if(changes.keyboardShortcut)toggleShortcut=changes.keyboardShortcut.newValue||DEFAULT_TOGGLE_SHORTCUT;if(changes.latinDisplay)latinDisplayMode=changes.latinDisplay.newValue===true;if(changes.keyboardCustomOrders){customKeyOrders=changes.keyboardCustomOrders.newValue||{};if(host&&keyboardLayout==='custom')renderKeys();}if(changes.keyboardLayout){keyboardLayout=changes.keyboardLayout.newValue||DEFAULT_KEYBOARD_LAYOUT;updateLayoutTabs();if(host)renderKeys();}});
+  readLocal(['keyboardShortcut','latinDisplay','keyboardLayout','keyboardCustomOrders','uiLanguage'],data=>{if(data.keyboardShortcut?.key)toggleShortcut=data.keyboardShortcut;latinDisplayMode=data.latinDisplay===true;keyboardLayout=data.keyboardLayout||DEFAULT_KEYBOARD_LAYOUT;customKeyOrders=data.keyboardCustomOrders||{};globalThis.KecapLocale?.setLanguage(data.uiLanguage||'en');updateLayoutTabs();if(host)renderKeys();});
+  chrome.storage.onChanged.addListener((changes,area)=>{if(area!=='local')return;if(changes.keyboardShortcut)toggleShortcut=changes.keyboardShortcut.newValue||DEFAULT_TOGGLE_SHORTCUT;if(changes.latinDisplay)latinDisplayMode=changes.latinDisplay.newValue===true;if(changes.keyboardCustomOrders){customKeyOrders=changes.keyboardCustomOrders.newValue||{};if(host&&keyboardLayout==='custom')renderKeys();}if(changes.keyboardLayout){keyboardLayout=changes.keyboardLayout.newValue||DEFAULT_KEYBOARD_LAYOUT;updateLayoutTabs();if(host)renderKeys();}if(changes.uiLanguage){globalThis.KecapLocale?.setLanguage(changes.uiLanguage.newValue||'en');refreshKeyboardLanguage();}});
   chrome.runtime.onMessage.addListener((msg,_sender,sendResponse)=>{
     if(msg?.type!=='KECAP_OPEN_KEYBOARD')return false;
     openKeyboard(); sendResponse({ok:true}); return true;
