@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "minimum_chrome_version": "116",
   "name": "Kécap",
-  "version": "1.0.50",
+  "version": "1.0.52",
   "description": "Read the web in Aksara Sunda. Rewrite page text, captions, and images, with an on-screen keyboard and Latin spelling help.",
   "permissions": ["storage", "contextMenus", "offscreen"],
   "host_permissions": ["http://*/*", "https://*/*"],

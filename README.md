@@ -1,58 +1,72 @@
-# Kécap — Project submission draft
+# Kécap
 
-## Project name
+**Bring Aksara Sunda into everyday browsing.**
 
-Kécap
+Kécap is a Chrome extension that helps people read and write Aksara Sunda as part of the web they already use. It rewrites supported page text and YouTube captions into the script, explains how characters are formed, and provides an on-screen keyboard for writing in websites and chats.
 
-## Award tracks
+Kécap is named after the Sundanese word for “word.” A writing system stays alive through use, so Kécap makes it easier to encounter and practice Aksara Sunda while reading and messaging—not only in a classroom.
 
-- [x] Design × Tech — primary track
-- [x] Culture × Tech
+## Features
 
-## Project overview
+- Automatically rewrite visible website text into Aksara Sunda, with controls to disable rewriting or toggle it for a page.
+- Hover a word to see its Latin spelling; right-click for a character and rarangken breakdown.
+- Rewrite changing YouTube captions when page rewriting is enabled.
+- Use a movable, keyboard-navigable on-screen keyboard to enter Aksara Sunda in supported text fields.
+- Optionally show Aksara while a website receives the Latin spelling, so people can practice in ordinary conversations without asking others to learn the script.
+- Run OCR on a selected image and render recognized text in Aksara Sunda.
+- Choose English, Bahasa Indonesia, or Basa Sunda for the extension interface.
 
-This is ᮞᮥᮔ᮪ᮓ, Aksara Sunda. It is taught in school, but many learners have little reason to use it afterward. After six years studying Chinese, I still struggle with Hanzi because I rarely used it outside class; my Sundanese-fluent father cannot read Aksara either. Kécap (“word” in Sundanese) is a Chrome extension that brings Aksara into everyday browsing and chat. As someone types, they see Aksara while the website receives Latin, so friends can read and reply as usual. One person gets real writing practice without asking the whole conversation to learn a new script.
+This is spelling-based transliteration, not translation of meaning. The mapping is a practical approximation and may not cover every spelling or orthographic edge case.
 
-*Word count: 95 / 100*
+## Install in Chrome
 
-## The build
+1. Clone or download this repository and extract it if needed.
+2. Open `chrome://extensions` and enable **Developer mode**.
+3. Select **Load unpacked** and choose the `kecap-extension/` folder in this repository.
+4. Pin Kécap from Chrome's Extensions menu to reach its popup and settings quickly.
 
-Kécap is a Manifest V3 Chrome extension built with JavaScript, HTML/CSS, local transliteration logic, Tesseract.js OCR, Chrome storage, and Noto Sans Sundanese. It rewrites supported page text, including dynamically updated YouTube captions, explains spellings on hover and right-click, converts digits, and includes an on-screen keyboard. In chat, its Latin-backed input lets the writer see Aksara while the website receives Latin. Image text recognition and transliteration run on-device without an API key. Next, we want to verify Telegram and WhatsApp Web compatibility, review spellings with Sundanese readers, and record a short demo.
+Automatic rewriting is enabled by default. Change it and other options in the extension popup. The on-screen keyboard can also be opened with its configurable shortcut.
 
-*Word count: 91 / 100*
+## Image OCR and privacy
 
-## Team & collaboration
+Image OCR uses the Tesseract.js engine and English and Indonesian language data bundled with the extension. Recognition and transliteration run locally in the browser; no API key or external OCR service is required. When you request OCR, Chrome fetches the selected image from the website that hosts it. Clear, large, horizontal text works best. Stylized lettering, vertical text, and complex layouts can be misread.
 
-I brought my perspective as a learner who wants to read Aksara Sunda, along with the product idea and personal connection. I used OpenAI Codex as a coding assistant to prototype and iterate on the extension. Building it showed me that lowering friction matters: people need a reason to use the script in their normal reading, not another isolated lesson. I have not yet had a fluent Sundanese reader formally review the mappings; that community perspective is a priority next.
+Page text, captions, and supported text fields are processed locally to provide Kécap's features. The extension does not send this content to a Kécap server, an AI provider, or analytics. When Latin-backed display is enabled, the website receives the Latin text you enter. See the [privacy policy](PRIVACY.md) for details.
 
-## AI & tool attribution
+## Development
 
-- **OpenAI Codex:** coding assistance and iterative implementation during development.
-- **Local image OCR:** Tesseract.js v7 and its core run on-device with bundled English and Indonesian OCR models from Tesseract's trained data. Images are not sent to an AI provider. OCR model files and Tesseract components are Apache 2.0 licensed; local transliteration uses the project's spelling mappings.
-- **Technology:** Chrome Manifest V3, JavaScript, HTML, CSS, Chrome extension storage, and the bundled Noto Sans Sundanese font.
-- **Font:** Noto Sans Sundanese from Noto Fonts, licensed under the SIL Open Font License 1.1.
-- **Reference material:** Aksara Sunda charts supplied by the project creator informed the character, modifier, and digit reference. No external text dataset is bundled.
+The extension source is in [`kecap-extension/`](kecap-extension/). It uses Chrome Manifest V3, JavaScript, HTML, and CSS. Transliteration and interface localization are implemented locally; OCR dependencies and assets are bundled under `kecap-extension/ocr/`.
 
-## Load the extension in Chrome
+To run the transliteration checks, open a terminal in `kecap-extension/` and run:
 
-1. Download or clone this repository, then extract it if it is a ZIP file.
-2. In Chrome, open `chrome://extensions` and turn on **Developer mode**.
-3. Click **Load unpacked** and select the repository's `kecap-extension/` folder.
-4. Pin Kécap from Chrome's Extensions menu if you want quick access to its settings and keyboard.
-5. Open a website. Automatic page rewriting is on by default; use the Kécap popup's Settings if you want to change it.
+```sh
+node test/aksara.test.js
+```
 
-Text rewriting, keyboard input, YouTube caption rewriting, and image OCR work without an API key. Image OCR is local and works best with clear, large, horizontal text; it does not translate meaning.
+The Chrome Web Store upload archive is generated at the repository root:
 
-## Project links & demo
+```sh
+python scripts/package_store_extension.py
+```
 
-- **Source code:** [github.com/whansel007/Kecap](https://github.com/whansel007/Kecap)
-- **Local demo:** [`kecap-extension/demo/demo.html`](kecap-extension/demo/demo.html) includes a text-rewriting and mock-comic walkthrough. Load the extension as described above, then open the demo page in Chrome.
-- **Planned demo video:** Show a Wikipedia page automatically rendered in Aksara, then compare two Telegram windows side by side: one displays ordinary Latin text, while the Kécap-enabled writer sees Aksara as they type and the site receives Latin. This demonstrates practice in a real conversation without requiring the other person to read Aksara. The submission video must be two minutes or less.
-- **Figma / prototype:** Not applicable; the interactive prototype is the Chrome extension.
-- **Try-it notes:** Page rewriting and local image OCR need no API key. The mock comic demo uses supplied sample text regions; real images are OCRed on-device. YouTube captions are rewritten when automatic page rewriting is enabled.
+That script packages the extension runtime and bundled assets into `kecap-extension-store.zip`, excluding development dependencies and tests. Store listing and privacy-form drafts are in [`CHROME_STORE_FORM.md`](CHROME_STORE_FORM.md) and [`STORE_SUBMISSION.md`](STORE_SUBMISSION.md); they are submission materials, not required to use Kécap.
 
-## Story for the presentation
+## Known limitations
 
-> A writing system doesn't survive because it's recorded somewhere. It survives because people use it.
+- Transliteration follows the project's supplied mappings. English spelling often does not indicate pronunciation, so the result may not represent spoken English accurately.
+- OCR accuracy depends on image quality, orientation, lettering, and layout. Some images may not be accessible to the browser or may fail to load.
+- Browser-protected pages and sites that restrict extension access cannot be modified. Website behavior and content security policies may also affect rendering and text-field support.
+- The mappings have not yet been formally reviewed by a fluent Sundanese orthography specialist; corrections and feedback are welcome.
 
-People often learn a spoken language by talking with its speakers. I want to bring that kind of everyday practice to a writing system. My Sundanese-fluent father cannot read Aksara Sunda, and I know from studying Chinese that lessons alone do not make me fluent in a script I rarely use. Kécap lets me write a Telegram message while seeing Aksara on my screen; the site sends Latin, so my friend can read and reply without changing how they chat. I can practice with any conversation partner, even one who has never learned Aksara. The point is not to make everyone learn at once—it is to make using the script part of something people already do.
+## Contributing and feedback
+
+Issues and corrections are welcome, especially feedback from Sundanese readers on transliteration and Aksara Sunda orthography. Please include the example Latin text, the expected Aksara form, and the context where it appears.
+
+- [Report an issue or suggest a correction](https://github.com/whansel007/Kecap/issues)
+- [Browse the source code](https://github.com/whansel007/Kecap)
+
+## Credits and licenses
+
+- OCR is powered by [Tesseract.js](https://github.com/naptha/tesseract.js) and bundled Tesseract OCR assets; license notices are included in `kecap-extension/ocr/`.
+- The bundled Noto Sans Sundanese font is from [Noto Fonts](https://github.com/notofonts/sundanese) and is licensed under the SIL Open Font License 1.1.
+- Aksara Sunda reference charts supplied by the project creator informed the character, modifier, and digit reference.
