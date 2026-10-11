@@ -2,12 +2,12 @@
   "manifest_version": 3,
   "minimum_chrome_version": "116",
   "name": "Kécap",
-  "version": "1.0.22",
+  "version": "1.0.42",
   "description": "Rewrite what you read into Aksara Sunda. Hover for the Latin original.",
   "permissions": ["storage", "contextMenus"],
   "host_permissions": ["<all_urls>"],
   "background": { "service_worker": "background.js" },
-  "content_scripts": [{ "matches": ["http://*/*", "https://*/*"], "js": ["lib/aksara.js", "content.js", "keyboard.js"], "css": ["content.css"], "run_at": "document_idle", "all_frames": false }],
+  "content_scripts": [{ "matches": ["http://*/*", "https://*/*"], "js": ["lib/aksara.js", "content.js", "latin-display.js", "keyboard.js"], "css": ["content.css"], "run_at": "document_idle", "all_frames": false }],
   "action": { "default_popup": "popup/popup.html" },
   "web_accessible_resources": [{ "resources": ["fonts/*"], "matches": ["<all_urls>"] }]
 }

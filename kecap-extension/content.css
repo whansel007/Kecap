@@ -1,6 +1,6 @@
 .kecap-run { font-family: "Kecap Sunda", "Noto Sans Sundanese", sans-serif !important; }
-.kecap-w { font-size: 1.25em; cursor: help; }
-.kecap-digit { font-size: 1.25em; cursor: help; }
+.kecap-w { font-size: 1.35em; letter-spacing: 0.04em; cursor: help; }
+.kecap-digit { font-size: 1.35em; letter-spacing: 0.04em; cursor: help; }
 .kecap-img-wrap { position: relative; display: inline-block; max-width: 100%; vertical-align: middle; }
 .kecap-img-wrap canvas { display:block; max-width:100%; }
 .kecap-img-toggle { position:absolute; right:8px; bottom:8px; border:0; border-radius:999px; padding:7px 11px; background:#542518; color:#fff; font:600 12px system-ui,sans-serif; cursor:pointer; box-shadow:0 2px 8px #0003; }
