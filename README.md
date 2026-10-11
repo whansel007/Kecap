@@ -11,19 +11,19 @@ Kécap
 
 ## Project overview
 
-ᮞᮥᮔ᮪ᮓ (Aksara Sunda) is still taught, but many learners have little reason to use it after school. I know that gap: after six years studying Chinese, I still struggle to read Hanzi because I rarely used it outside class. My father speaks Sundanese fluently but cannot read its script. Kécap (“word” in Sundanese) is a Chrome extension that transliterates supported web text into Aksara Sunda. Hover to see the Latin spelling and character breakdown, or type with its on-screen keyboard while websites continue receiving Latin text. Kécap brings the script into everyday reading so people have a reason to practice.
+This is ᮞᮥᮔ᮪ᮓ, Aksara Sunda. It is still taught, but many learners have little reason to use it after school. After six years studying Chinese, I still struggle with Hanzi because I rarely used it outside class; my Sundanese-fluent father cannot read the script either. Kécap (“word” in Sundanese) is a Chrome extension that transliterates supported web text into Aksara Sunda. Hover for the Latin spelling and character breakdown, or type in Aksara while websites receive Latin text. Kécap brings the script into everyday reading, giving people a reason to practice.
 
-*Word count: 87 / 100*
+*Word count: 91 / 100*
 
 ## The build
 
 Kécap is a Manifest V3 Chrome extension built with JavaScript, HTML/CSS, local transliteration logic, Chrome storage, and Noto Sans Sundanese. It transliterates page text, supports automatic rewriting, hover and right-click spelling explanations, digit conversion, keyboard layouts with rarangken, and Latin-backed Aksara entry. Optional image text extraction calls OpenAI or Anthropic only when requested. We explored using everyday browsing as a low-friction way to practice. Next, we want Sundanese readers to review spellings and explanations, improve site compatibility, and record a short demo.
 
-*Word count: 77 / 100*
+*Word count: 82 / 100*
 
 ## Team & collaboration
 
-This is currently a solo project. I brought the perspective of a learner who wants to read Aksara Sunda, along with my experience of studying a script without having a reason to use it in everyday life. I used OpenAI Codex as a coding assistant to build and iterate on the extension and its interface. The next important perspective to bring in is feedback from fluent Sundanese readers, especially to review the transliteration and character explanations.
+I brought my perspective as a learner who wants to read Aksara Sunda, along with the product idea and personal connection. I used OpenAI Codex as a coding assistant to prototype and iterate on the extension. Building it showed me that lowering friction matters: people need a reason to use the script in their normal reading, not another isolated lesson. I have not yet had a fluent Sundanese reader formally review the mappings; that community perspective is a priority next.
 
 ## AI & tool attribution
 
