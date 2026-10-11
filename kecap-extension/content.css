@@ -1,0 +1,16 @@
+.kecap-run { font-family: "Kecap Sunda", "Noto Sans Sundanese", sans-serif !important; }
+.kecap-w { font-size: 1.25em; cursor: help; }
+.kecap-digit { font-size: 1.25em; cursor: help; }
+.kecap-img-wrap { position: relative; display: inline-block; max-width: 100%; vertical-align: middle; }
+.kecap-img-wrap canvas { display:block; max-width:100%; }
+.kecap-img-toggle { position:absolute; right:8px; bottom:8px; border:0; border-radius:999px; padding:7px 11px; background:#542518; color:#fff; font:600 12px system-ui,sans-serif; cursor:pointer; box-shadow:0 2px 8px #0003; }
+body:has(#comic) { margin:0; background:#F4E6C9; color:#2A1911; font:16px/1.7 Georgia,serif; }
+body:has(#comic) > header { background:#542518; color:#fff; padding:32px max(24px,calc((100% - 850px)/2)); }
+body:has(#comic) > header > p:first-child { font:11px system-ui; letter-spacing:2px; color:#E8C98E; }
+body:has(#comic) > header h1 { font:700 48px system-ui; margin:5px 0; }
+body:has(#comic) nav { display:flex; gap:9px; flex-wrap:wrap; margin-top:20px; }
+body:has(#comic) button { border:0; border-radius:8px; background:#E0A526; color:#2A1911; padding:10px 14px; font:600 13px system-ui; cursor:pointer; }
+body:has(#comic) main { max-width:850px; margin:35px auto; padding:0 22px; }
+body:has(#comic) h2 { font:700 21px system-ui; color:#542518; }
+body:has(#comic) article p { max-width:720px; }
+body:has(#comic) img { display:block; max-width:100%; border-radius:10px; box-shadow:0 4px 18px #3332; margin:18px 0; }
